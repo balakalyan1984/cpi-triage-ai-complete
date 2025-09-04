@@ -21,6 +21,12 @@ spec:
         value: ""
       - name: AWS_DEFAULT_REGION
         value: "us-east-1"
+      - name: SLACK_WEBHOOK_URL
+        value: ""
+      - name: TEAMS_WEBHOOK_URL
+        value: ""
+      - name: DASHBOARD_URL
+        value: ""
   templates:
   - name: pipeline
     inputs:
@@ -35,10 +41,9 @@ spec:
         - name: summaryout
           globalName: summaryout
           path: /app/out/
-          archive:
-            none: {}
+          archive: { none: {} }
     container:
-      image: <your-registry>/<repo>:cpi-triage-ai-train
+      image: docker.io/yourname/cpi:cpi-triage-ai-train
       command: ["/bin/sh","-c"]
       env:
         - name: DATA_PATH
@@ -51,6 +56,12 @@ spec:
           value: "{{workflow.parameters.S3_DATA_URI}}"
         - name: AWS_DEFAULT_REGION
           value: "{{workflow.parameters.AWS_DEFAULT_REGION}}"
+        - name: SLACK_WEBHOOK_URL
+          value: "{{workflow.parameters.SLACK_WEBHOOK_URL}}"
+        - name: TEAMS_WEBHOOK_URL
+          value: "{{workflow.parameters.TEAMS_WEBHOOK_URL}}"
+        - name: DASHBOARD_URL
+          value: "{{workflow.parameters.DASHBOARD_URL}}"
         - name: OUT_DIR
           value: "/app/out"
       args:
