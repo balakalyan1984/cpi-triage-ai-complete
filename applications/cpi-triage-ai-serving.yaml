@@ -18,13 +18,19 @@ spec:
   template:
     apiVersion: "serving.kserve.io/v1beta1"
     metadata:
+      annotations: |
+        autoscaling.knative.dev/metric: concurrency
+        autoscaling.knative.dev/target: 1
+        autoscaling.knative.dev/targetBurstCapacity: 0
       labels: |
         ai.sap.com/resourcePlan: starter
     spec: |
       predictor:
+        minReplicas: 1
+        maxReplicas: 3
         containers:
         - name: kserve-container
-          image: <your-registry>/<repo>:cpi-triage-ai-serve
+          image: docker.io/yourname/cpi:cpi-triage-ai-serve
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -33,10 +39,12 @@ spec:
             - >
               uvicorn src.serve_cpi_btpcore:app --host 0.0.0.0 --port 8080
           env:
+            # This lets the server load the model directly from the artifact URI (S3/object store)
             - name: S3_MODEL_URI
               value: "{{inputs.artifacts.cpimodel}}"
             - name: STORAGE_URI
               value: "{{inputs.artifacts.cpimodel}}"
+            # Optional local paths if model is mounted by runtime
             - name: MODEL_PATH
               value: "/app/model/model.pkl"
             - name: VEC_PATH
