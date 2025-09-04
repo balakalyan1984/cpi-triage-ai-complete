@@ -1,0 +1,6 @@
+FROM python:3.11-slim
+WORKDIR /app
+COPY src/requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY src/train_cpi_btpcore.py src/summary_job.py ./src/
+CMD ["python", "src/train_cpi_btpcore.py"]

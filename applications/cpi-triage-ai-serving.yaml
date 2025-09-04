@@ -1,0 +1,45 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  name: cpi-triage-ai-serving
+  annotations:
+    scenarios.ai.sap.com/name: "CPI-Triage-AI"
+    scenarios.ai.sap.com/description: "Serve CPI log classifier as HTTP API"
+    executables.ai.sap.com/name: "cpi-model-serving"
+    executables.ai.sap.com/description: "FastAPI inference for CPI classifier"
+    artifacts.ai.sap.com/cpimodel.kind: "model"
+  labels:
+    scenarios.ai.sap.com/id: "cpi-triage-ai"
+    ai.sap.com/version: "4.0"
+spec:
+  inputs:
+    artifacts:
+      - name: cpimodel
+  template:
+    apiVersion: "serving.kserve.io/v1beta1"
+    metadata:
+      labels: |
+        ai.sap.com/resourcePlan: starter
+    spec: |
+      predictor:
+        containers:
+        - name: kserve-container
+          image: <your-registry>/<repo>:cpi-triage-ai-serve
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          command: ["bash","-lc"]
+          args:
+            - >
+              uvicorn src.serve_cpi_btpcore:app --host 0.0.0.0 --port 8080
+          env:
+            - name: S3_MODEL_URI
+              value: "{{inputs.artifacts.cpimodel}}"
+            - name: STORAGE_URI
+              value: "{{inputs.artifacts.cpimodel}}"
+            - name: MODEL_PATH
+              value: "/app/model/model.pkl"
+            - name: VEC_PATH
+              value: "/app/model/vectorizer.pkl"
+            - name: AWS_DEFAULT_REGION
+              value: "us-east-1"
