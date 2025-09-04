@@ -164,4 +164,34 @@ Set your registry image names in all three YAMLs.
 
 Provide S3 URIs for dataset/model.
 
+
 Provide AWS credentials either in the runtime or as env vars in Executions/Serving.
+
+
+
+
+Next steps (quick)
+
+Build & push your images (names match what’s in YAML):
+
+docker build -f docker/Dockerfile.train -t docker.io/yourname/cpi:cpi-triage-ai-train .
+docker push docker.io/yourname/cpi:cpi-triage-ai-train
+
+docker build -f docker/Dockerfile.serve -t docker.io/yourname/cpi:cpi-triage-ai-serve .
+docker push docker.io/yourname/cpi:cpi-triage-ai-serve
+
+
+Import all three YAMLs in AI Launchpad → Applications.
+
+Run training (Execution) with S3_DATA_URI set to your dataset (e.g., s3://…/cpi_logs.csv).
+
+Create serving from the Serving Executable using the output cpimodel artifact.
+
+Test:
+
+curl -s https://<endpoint>/health
+curl -s -X POST https://<endpoint>/predict -H "Content-Type: application/json" \
+  -d '{"ARTIFACT_NAME":"InvoiceProcessing","ORIGIN_COMPONENT_NAME":"HTTP","LOG_LEVEL":"ERROR"}'
+
+
+If you also want me to fill in a docker secret name (imagePullSecret) in the ServingTemplate, tell me the secret’s name and I’ll update it right away.
