@@ -30,7 +30,7 @@ spec:
         maxReplicas: 3
         containers:
         - name: kserve-container
-          image: docker.io/yourname/cpi:cpi-triage-ai-serve
+          image: docker.io/balakalyandocker/miltonc:cpi-triage-ai-serve
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -51,3 +51,4 @@ spec:
               value: "/app/model/vectorizer.pkl"
             - name: AWS_DEFAULT_REGION
               value: "us-east-1"
+
