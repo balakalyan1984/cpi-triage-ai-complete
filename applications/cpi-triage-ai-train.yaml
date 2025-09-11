@@ -43,7 +43,7 @@ spec:
             path: /app/model/vectorizer.pkl # single file → no .tgz
             archive: { none: {} }
       container:
-        image: docker.io/balakalyandocker/miltonc:cpi-triage-ai-train-v2   # bump tag if you rebuild
+        image: docker.io/balakalyandocker/miltonc:cpi-triage-ai-train-v3   # bump tag if you rebuild
         command: ["/bin/sh","-c"]
         env:
           - name: TARGET_COLUMN
@@ -67,6 +67,7 @@ spec:
             value: "/app/model/vectorizer.pkl"
         args:
           - "python /app/src/train_cpi_btpcore.py"
+
 
 
 
