@@ -44,6 +44,7 @@ spec:
             archive: { none: {} }
       container:
         image: docker.io/balakalyandocker/miltonc:cpi-triage-ai-train-v3   # bump tag if you rebuild
+        imagePullPolicy: Always            # <— ensure new tag is pulled
         command: ["/bin/sh","-c"]
         env:
           - name: TARGET_COLUMN
@@ -66,7 +67,11 @@ spec:
           - name: VEC_PATH
             value: "/app/model/vectorizer.pkl"
         args:
-          - "python /app/src/train_cpi_btpcore.py"
+          - >
+            echo '--- /app/data ---'; ls -l /app/data || true;
+            echo '--- /app/model (before) ---'; ls -l /app/model || true;
+            python /app/src/train_cpi_btpcore.py;
+            echo '--- /app/model (after) ---'; ls -l /app/model || true;
 
 
 
