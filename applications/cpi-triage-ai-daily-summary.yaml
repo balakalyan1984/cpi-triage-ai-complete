@@ -43,7 +43,7 @@ spec:
           path: /app/out/
           archive: { none: {} }
     container:
-      image: docker.io/yourname/cpi:cpi-triage-ai-train
+      image: docker.io/balakalyandocker/miltonc:cpi-triage-ai-train
       command: ["/bin/sh","-c"]
       env:
         - name: DATA_PATH
@@ -66,3 +66,4 @@ spec:
           value: "/app/out"
       args:
         - "python /app/src/summary_job.py"
+
