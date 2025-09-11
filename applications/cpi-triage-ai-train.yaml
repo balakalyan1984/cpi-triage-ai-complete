@@ -35,7 +35,7 @@ spec:
       artifacts:
         - name: cpimodel
           globalName: cpimodel
-          path: /app/model/
+          path: /app/model/model.pkl
           archive: { none: {} }
     container:
       image: docker.io/balakalyandocker/miltonc:cpi-triage-ai-train
@@ -59,4 +59,5 @@ spec:
           value: "/app/model/vectorizer.pkl"
       args:
         - "python /app/src/train_cpi_btpcore.py"
+
 
